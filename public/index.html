@@ -1,13 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Recording in process</title>
+  </head>
+  <body>
+    <h1>good to go</h1>
 
-<head>
-  <meta charset="utf-8">
-  <title> Stream Express</title>
-</head>
+    <img id="play" />
 
-<body>
-  <h1> The Best Streaming Service</h1>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <canvas id="preview"></canvas>
+    <script type="text/javascript">
+      (function (exports, d) {
+        function domReady(fn, context) {
+          function onReady(event) {
+            d.removeEventListener("DOMContentLoaded", onReady);
+            fn.call(context || exports, event);
+          }
 
+          function onReadyIe(event) {
+            if (d.readyState === "complete") {
+              d.detachEvent("onreadystatechange", onReadyIe);
+              fn.call(context || exports, event);
+            }
+          }
+
+          (d.addEventListener &&
+            d.addEventListener("DOMContentLoaded", onReady)) ||
+            (d.attachEvent && d.attachEvent("onreadystatechange", onReadyIe));
+        }
+
+        exports.domReady = domReady;
+      })(window, document);
+      const socket = io.connect("192.168.1.8:3000");
+
+      socket.on("stream", (image) => {
+        var videoImage = document.getElementById("play");
+        videoImage.src = image;
+      });
+    </script>
+  </body>
 </html>
